@@ -1,0 +1,28 @@
+{
+    "name": "asset-transfer-basic",
+    "version": "1.0.0",
+    "description": "Asset-transfer-basic application implemented in JavaScript",
+    "engines": {
+        "node": ">=12",
+        "npm": ">=5"
+    },
+    "scripts": {
+        "lint": "eslint *.js",
+        "pretest": "npm run lint",
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    },
+    "engineStrict": true,
+    "author": "Antoni Bergas Galmés",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.3",
+        "fabric-ca-client": "^2.2.4",
+        "fabric-network": "^2.2.4",
+        "nodemon": "^2.0.15"
+    },
+    "devDependencies": {
+        "eslint": "^7.32.0"
+    }
+}
