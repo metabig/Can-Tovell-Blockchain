@@ -1,5 +1,8 @@
 # First Run Hyperledger
 
+TODO:
+[] Make softlinks of config files
+
 To run:
 ```
 ./network.sh up createChannel -ca
