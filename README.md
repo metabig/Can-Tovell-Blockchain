@@ -4,8 +4,8 @@ To run:
 ```
 ./network.sh up createChannel -ca
 ./network.sh deployCC -ccn sensorchain -ccp /home/metabig/first-run-hyperledger/chaincode -ccl javascript
-export PATH=${PWD}/../bin:$PATH
-export FABRIC_CFG_PATH=$PWD/../config/
+export PATH=${PWD}/bin:$PATH
+export FABRIC_CFG_PATH=$PWD/config/
 # Environment variables for Org1
 
 export CORE_PEER_TLS_ENABLED=true
