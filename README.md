@@ -1,7 +1,7 @@
 # First Run Hyperledger
 
 TODO:
-[] Make softlinks of config files
+- [ ] Make softlinks of config files
 
 To run:
 ```
