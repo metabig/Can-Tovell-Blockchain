@@ -1,9 +1,9 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 
 const { Gateway, Wallets } = require("fabric-network");
 const FabricCAServices = require("fabric-ca-client");
+
 const path = require("path");
 const {
   buildCAClient,
@@ -22,32 +22,55 @@ const ccp = buildCCPOrg1();
 
 const caClient = buildCAClient(FabricCAServices, ccp, "ca.org1.example.com");
 
+const gateway = new Gateway();
+
+const getContract = async () => {
+  const network = await gateway.getNetwork(channelName);
+  return network.getContract(chaincodeName);
+};
+
+const app = express();
+app.use(express.json());
+
 app.use(
   cors({
     origin: "*",
   })
 );
 
-app.get("/", async (req, res) => {
-  const wallet = await buildWallet(Wallets, walletPath);
+//peer chaincode query -C mychannel -n sensorchain -c '{"Args":["QueryAssets","{\"selector\":{\"docType\":\"sensor\"}}"]}' | jq
 
-  const gateway = new Gateway();
-
-  await gateway.connect(ccp, {
-    wallet,
-    identity: org1UserId,
-    discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
-  });
-
-  // Build a network instance based on the channel where the smart contract is deployed
+app.get("/api/sensors", async (req, res) => {
   const network = await gateway.getNetwork(channelName);
-
-  // Get the contract from the network.
   const contract = network.getContract(chaincodeName);
 
-  let result = await contract.evaluateTransaction('GetAllAssets');
+  let result = await contract.evaluateTransaction(
+    "QueryAssets",
+    '{"selector":{"docType":"sensor"}}'
+  );
 
   res.json(JSON.parse(result.toString()));
+});
+
+app.patch("/api/device/:id", async (req, res) => {
+  const device = req.body;
+  const contract = await getContract();
+  const result = await contract.submitTransaction(
+    "UpdateDevice",
+    req.params.id,
+    device.value
+  );
+  res.status(200).send({ device: device, response: result });
+});
+
+//peer chaincode query -C mychannel -n sensorchain -c '{"Args":["GetAssetHistory","sensor2"]}' | jq
+app.get("/api/history/:id", async (req, res) => {
+  const contract = await getContract();
+  const result = await contract.submitTransaction(
+    "GetAssetHistory",
+    req.params.id
+  );
+  res.status(200).send(result);
 });
 
 app.listen(8100, async () => {
@@ -63,5 +86,14 @@ app.listen(8100, async () => {
     "org1.department1"
   );
 
-  console.log("Started Successfully");
+  await gateway.connect(ccp, {
+    wallet,
+    identity: org1UserId,
+    discovery: { enabled: true, asLocalhost: true },
+  });
+  //const network = await gateway.getNetwork(channelName);
+  //const contract = network.getContract(chaincodeName);
+  //await contract.submitTransaction("InitLedger");
+  //console.log("[InitLedger]: Function completed");
+  console.log("Started Successfully on port 8100");
 });

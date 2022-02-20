@@ -1,0 +1,12 @@
+GET http://localhost:8100/api/sensors
+
+###
+PATCH http://localhost:8100/api/device/sensor1
+Content-Type: application/json
+
+{
+    "value": 55
+}
+
+###
+GET http://localhost:8100/api/history/sensor1
