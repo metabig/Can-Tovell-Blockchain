@@ -10,3 +10,14 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8100/api/history/sensor1
+
+###
+POST http://localhost:8100/api/sensors
+Content-Type: application/json
+
+{
+    "id": "Sensor 3",
+    "unit": "g/ml",
+    "value": 0.1337,
+    "type": "sensor"
+}

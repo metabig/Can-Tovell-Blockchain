@@ -285,15 +285,15 @@ class SensorUpdater extends Contract {
 	async InitLedger(ctx) {
 		const assets = [
 			{
-				id: 'sensor1',
-				unit: 'degrees',
+				id: 'Termòmetre',
+				unit: 'graus',
 				value: 5,
 				type: 'sensor'
 			},
 			{
-				id: 'sensor2',
-				unit: 'degrees',
-				value: 5,
+				id: 'Baròmetre',
+				unit: 'atm',
+				value: 0.8,
 				type: 'sensor'
 			}
 		];

@@ -38,8 +38,24 @@ app.use(
   })
 );
 
-//peer chaincode query -C mychannel -n sensorchain -c '{"Args":["QueryAssets","{\"selector\":{\"docType\":\"sensor\"}}"]}' | jq
+app.post("/api/sensors", async (req, res) => {
+  const device = req.body;
+  const network = await gateway.getNetwork(channelName);
+  const contract = network.getContract(chaincodeName);
+  
+  console.log(device)
+  let result = await contract.submitTransaction(
+    "CreateAsset",
+    device.id,
+    device.unit,
+    device.value,
+    device.type
+  );
+  res.status(200).json(device);
+});
 
+
+//peer chaincode query -C mychannel -n sensorchain -c '{"Args":["QueryAssets","{\"selector\":{\"docType\":\"sensor\"}}"]}' | jq
 app.get("/api/sensors", async (req, res) => {
   const network = await gateway.getNetwork(channelName);
   const contract = network.getContract(chaincodeName);
@@ -91,9 +107,9 @@ app.listen(8100, async () => {
     identity: org1UserId,
     discovery: { enabled: true, asLocalhost: true },
   });
-  //const network = await gateway.getNetwork(channelName);
-  //const contract = network.getContract(chaincodeName);
-  //await contract.submitTransaction("InitLedger");
-  //console.log("[InitLedger]: Function completed");
+  // const network = await gateway.getNetwork(channelName);
+  // const contract = network.getContract(chaincodeName);
+  // await contract.submitTransaction("InitLedger");
+  // console.log("[InitLedger]: Function completed");
   console.log("Started Successfully on port 8100");
 });
