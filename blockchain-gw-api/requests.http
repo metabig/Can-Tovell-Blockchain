@@ -1,15 +1,15 @@
 GET http://localhost:8100/api/sensors
 
 ###
-PATCH http://localhost:8100/api/device/sensor1
+PATCH http://localhost:8100/api/device/Amoni11
 Content-Type: application/json
 
 {
-    "value": 55
+    "value": 0.75
 }
 
 ###
-GET http://localhost:8100/api/history/sensor1
+GET http://localhost:8100/api/history/Amoni11
 
 ###
 POST http://localhost:8100/api/sensors
